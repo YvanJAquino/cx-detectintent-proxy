@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "./service",
+			"name": "cx-detectintent-proxy SERVICE"
+		},
+		{
+			"path": ".",
+			"name": "cx-detectintent-proxy ROOT"
+		},
+		{
+			"path": "../../",
+			"name": "github.com: Project References"
+		},
+		{
+			"path": "../../../go-patterns",
+			"name": "Reference Go Patterns"
+		}
+	],
+	"settings": {
+		"gopls": {
+			"build.directoryFilters": [
+				"-../../",
+				"+cx-detectintent-proxy"
+			]
+		}
+	}
+}
