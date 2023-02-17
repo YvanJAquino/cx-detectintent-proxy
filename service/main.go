@@ -16,7 +16,6 @@ import (
 	cx "cloud.google.com/go/dialogflow/cx/apiv3"
 	"cloud.google.com/go/dialogflow/cx/apiv3/cxpb"
 	"google.golang.org/protobuf/encoding/protojson"
-	"github.com/google/uuid"
 )
 
 var (
@@ -34,8 +33,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	handlers := &SessionsHandlers{
+		SessionsClient: sessions,
+	}
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("/detect-intent", handlers.HandleRequest)
 	server := &http.Server{
 		Addr:        ":" + PORT,
 		Handler:     mux,
@@ -84,22 +87,16 @@ func responseMarshaler(w io.Writer, res *cxpb.DetectIntentResponse) error {
 	return nil
 }
 
-type DetectIntentHandlers struct {
+type SessionsHandlers struct {
 	*cx.SessionsClient
 }
 
-func (h DetectIntentHandlers) HandleRequest(w http.ResponseWriter, r *http.Request) {
+func (h SessionsHandlers) HandleRequest(w http.ResponseWriter, r *http.Request) {
 	dir, err := requestUnmarshaler(r.Body)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	// Add a session if it's missing!
-	if dir.Session == "" {
-		sessionID := uuid.New()
-		dir.Session = sessionID.String()
-	}
-
 	diresp, err := h.SessionsClient.DetectIntent(r.Context(), dir)
 	if err != nil {
 		log.Println(err)
