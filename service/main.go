@@ -60,6 +60,8 @@ func requestUnmarshaler(r io.ReadCloser) (*cxpb.DetectIntentRequest, error) {
 	if err != nil {
 		return nil, err
 	}
+	// this is new...!
+	log.Println(string(b))
 	pbUnmarshaler := &protojson.UnmarshalOptions{
 		AllowPartial:   true,
 		DiscardUnknown: true,
