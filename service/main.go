@@ -97,6 +97,7 @@ func (h SessionsHandlers) HandleRequest(w http.ResponseWriter, r *http.Request) 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
+		return
 	}
 
 	dir, err := requestUnmarshaler(r.Body)
